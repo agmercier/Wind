@@ -9,7 +9,7 @@ import SubmitButton from '../components/forms/SubmitButton';
 import ColorCircle from '../components/ColorCircle';
 
 export default function AddTaskScreen({navigation, route}) {
-  const initialValues = route.params ? route.params : {title: '', description: '', completed: 0};
+  const initialValues = route.params ? route.params : {title: '', description: '', completed: 0, date: new Date()};
   const {addTask, updateTask} = useApi();
 
   const handleSubmit = async (task) => {

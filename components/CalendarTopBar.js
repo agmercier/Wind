@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, StyleSheet} from 'react-native';
-import {toDateId } from "@marceloterreiro/flash-calendar";
+import {toDateId, fromDateId} from "@marceloterreiro/flash-calendar";
 import {CustomCalendar} from './CustomCalendar';
 import { addMonths, subMonths, startOfMonth, getWeekOfMonth, getDate, subWeeks, addWeeks,getDaysInMonth } from "date-fns";
 
@@ -39,12 +39,12 @@ export default function CalendarTopBar({selectedDate, setSelectedDate}) {
       <CustomCalendar
       calendarActiveDateRanges={[
         {
-          startId: selectedDate,
-          endId: selectedDate,
+          startId: toDateId(selectedDate),
+          endId: toDateId(selectedDate),
         },
       ]}
       calendarMonthId={toDateId(currentMonth)}
-      onCalendarDayPress={setSelectedDate}
+      onCalendarDayPress={(dateID) => setSelectedDate(fromDateId(dateID))}
       calendarFirstDayOfWeek={'monday'}
       onPreviousMonthPress={handleLeftPress}
       onNextMonthPress={handleRightPress}

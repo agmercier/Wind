@@ -10,7 +10,11 @@ import AddTaskButton from '../components/AddTaskButton';
 import CompletedTaskList from '../components/CompletedTaskList';
 import TaskItem from '../components/TaskItem';
 import CompletedTaskItem from '../components/CompletedTaskItem';
+import { LogBox } from 'react-native';
 
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 export default function HomeScreen({navigation}) {
   const {tasks, initDatabase, addTask, deleteTask, updateTask} = useApi();
   const isFocused = useIsFocused();
@@ -41,8 +45,8 @@ export default function HomeScreen({navigation}) {
   return (
     <Screen>
         <CalendarTopBar selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
-        <TaskList tasks={tasks.filter(t => t.completed == 0)} handleUpdateTask={handleUpdateTask} deleteTask={handleDeleteTask} handleCompleteTask={handleCompleteTask} ListItem={TaskItem}/>
-        <CompletedTaskList tasks={tasks.filter(t => t.completed == 1)} handleUpdateTask={handleUpdateTask} deleteTask={handleDeleteTask} handleCompleteTask={handleCompleteTask} ListItem={CompletedTaskItem}/>
+        <TaskList tasks={tasks.filter(t => (t.completed == 0) && (t.date.toDateString() == selectedDate.toDateString()))} handleUpdateTask={handleUpdateTask} deleteTask={handleDeleteTask} handleCompleteTask={handleCompleteTask} ListItem={TaskItem}/>
+        <CompletedTaskList tasks={tasks.filter(t => (t.completed == 1) && (t.date.toDateString() == selectedDate.toDateString()))} handleUpdateTask={handleUpdateTask} deleteTask={handleDeleteTask} handleCompleteTask={handleCompleteTask} ListItem={CompletedTaskItem}/>
         <AddTaskButton onPress={handleAddTask}/>
     </Screen>
   );
