@@ -7,14 +7,16 @@ import AppForm from '../components/forms/AppForm';
 import AppFormInput from '../components/forms/AppFormInput';
 import SubmitButton from '../components/forms/SubmitButton';
 import ColorCircle from '../components/ColorCircle';
+import CalendarBarForm from '../components/forms/CalendarBarForm';
 
 export default function AddTaskScreen({navigation, route}) {
-  const initialValues = route.params ? route.params : {title: '', description: '', completed: 0, date: new Date()};
+  const selectedDate = route.params && route.params.selectedDate ? new Date(route.params.selectedDate) : new Date();
+  const initialValues = route.params && route.params.task ? route.params.task : {title: '', description: '', completed: 0, date: selectedDate};
   const {addTask, updateTask} = useApi();
 
   const handleSubmit = async (task) => {
-    route.params ? await updateTask(task) : await addTask(task);
-    navigation.navigate('Home');
+    route.params.task ? await updateTask(task) : await addTask(task);
+    navigation.navigate('Home', {selectedDate: task.date.toString()});
   }
 
   return (
@@ -28,6 +30,7 @@ export default function AddTaskScreen({navigation, route}) {
           <AppFormInput name="title" placeholder="Title" defaultValue={initialValues.title} style={{width: '90%'}}/>
         </View>
         <AppFormInput name="description" placeholder="Description" defaultValue={initialValues.description}/>
+        <CalendarBarForm name="date"/>
         <SubmitButton title="Add Task"/>
       </AppForm>
     </Screen>

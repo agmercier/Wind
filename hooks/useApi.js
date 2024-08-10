@@ -30,13 +30,11 @@ export default function useApi() {
             // return allRows;
         }
         catch (error) {
-            console.log('its here')
             console.log(error);
         }
     }
     
     const addTask = async (task) => {
-        console.log('task: ', task)
         try {
             const db = await SQLite.openDatabaseAsync('databaseName');
             const result = await db.runAsync('INSERT INTO tasks (title, description, date) VALUES (?, ?, ?)', task.title, task.description, task.date.toString());
@@ -71,7 +69,7 @@ export default function useApi() {
             const result = await db.runAsync('DELETE FROM tasks WHERE id = $id', { $id: task.id });
             const allRows = await db.getAllAsync('SELECT * FROM tasks');
             db.closeAsync();
-            setTasks(allRows);
+            setTasks(allRows.map(row => ({ ...row, date: new Date(row.date) })));
             return result.changes;
         }
         catch (error) {

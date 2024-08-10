@@ -12,23 +12,25 @@ import TaskItem from '../components/TaskItem';
 import CompletedTaskItem from '../components/CompletedTaskItem';
 import { LogBox } from 'react-native';
 
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
-export default function HomeScreen({navigation}) {
+
+export default function HomeScreen({navigation, route}) {
+  LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
   const {tasks, initDatabase, addTask, deleteTask, updateTask} = useApi();
   const isFocused = useIsFocused();
   useEffect(() => {
     isFocused && initDatabase();
+    (isFocused && route.params && route.params.selectedDate) && setSelectedDate(new Date(route.params.selectedDate));
   }
   , [isFocused]);
-
+  const [selectedDate, setSelectedDate] = useState(route.params && route.params.selectedDate ? new Date(route.params.selectedDate) : new Date());
   const handleAddTask = () => {
-    navigation.navigate('AddTask')
+    navigation.navigate('AddTask', {selectedDate: selectedDate.toString()});
   }
 
   const handleUpdateTask = (task) => {
-    navigation.navigate('AddTask', task)
+    navigation.navigate('AddTask', {task: task, selectedDate: selectedDate.toString()})
   }
 
   const handleDeleteTask = (task) => {
@@ -36,11 +38,10 @@ export default function HomeScreen({navigation}) {
   }
 
   const handleCompleteTask = (task) => {
-    // console.log('handle: ', task)
     updateTask({...task, completed: task.completed ? 0 : 1});
   }
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+ 
 
   return (
     <Screen>

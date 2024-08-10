@@ -5,7 +5,6 @@ import {CustomCalendar} from './CustomCalendar';
 import { addMonths, subMonths, startOfMonth, getWeekOfMonth, getDate, subWeeks, addWeeks,getDaysInMonth } from "date-fns";
 
 export default function CalendarTopBar({selectedDate, setSelectedDate}) {
-  
   const [currentMonth, setCurrentMonth] = useState(startOfMonth(selectedDate));
   const [selectedWeek, setSelectedWeek] = useState(selectedDate);
   const [open, setOpen] = useState(false);
